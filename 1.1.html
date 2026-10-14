@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE ICT - 1.1 Hardware and Software Quiz (30 MCQs)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 p-4 text-center shadow-md">
+        <h1 class="text-2xl font-bold text-sky-400">IGCSE ICT Practice Quiz</h1>
+        <p class="text-sm text-slate-400">Chapter 1.1 Hardware & Software (30 Multiple Choice Questions)</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4 max-w-3xl mx-auto w-full">
+
+        <!-- Progress Bar & Score -->
+        <div class="w-full flex justify-between items-center mb-6 text-sm text-slate-400">
+            <span id="question-counter">Question 1 of 30</span>
+            <span id="score-display" class="bg-sky-900 text-sky-300 px-3 py-1 rounded-full text-xs font-semibold">Score: 0</span>
+        </div>
+
+        <!-- Quiz Box -->
+        <div id="quiz-container" class="w-full bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+            <div id="question-box" class="text-xl font-medium text-slate-100 mb-6">
+                Loading question...
+            </div>
+
+            <div id="options-container" class="space-y-3 mb-6">
+                <!-- Options populated dynamically -->
+            </div>
+
+            <div id="feedback-box" class="hidden p-4 rounded-xl mb-4 text-sm font-medium">
+                <!-- Feedback populated dynamically -->
+            </div>
+
+            <div class="flex justify-end">
+                <button id="next-btn" onclick="nextQuestion()" class="hidden bg-sky-600 hover:bg-sky-500 text-white font-semibold py-3 px-6 rounded-xl transition shadow-lg">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Results Box -->
+        <div id="results-container" class="hidden w-full bg-slate-800 border border-slate-700 rounded-2xl p-8 text-center shadow-xl">
+            <h2 class="text-3xl font-bold text-sky-400 mb-4">Quiz Completed! 🎉</h2>
+            <p id="final-score" class="text-xl text-slate-200 mb-6">You scored X out of 30</p>
+            <button onclick="restartQuiz()" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold py-3 px-6 rounded-xl transition shadow-lg">Restart Quiz</button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 border-t border-slate-700 p-3 text-center text-xs text-slate-500">
+        IGCSE ICT Revision &bull; Hardware and Software
+    </footer>
+
+    <!-- Script Logic -->
+    <script>
+        const questions = [
+            {
+                question: "What is the general term for the physical components that make up a typical computer system?",
+                options: [
+                    { text: "Software", isCorrect: false, rationale: "Software refers to the programs that control the computer system, not physical parts." },
+                    { text: "Hardware", isCorrect: true, rationale: "Hardware is the term used for physical components such as the keyboard, monitor, and internal circuitry." },
+                    { text: "Firmware", isCorrect: false, rationale: "Firmware is low-level software permanently stored on non-volatile memory chips." },
+                    { text: "Peripheral", isCorrect: false, rationale: "Peripherals are external hardware devices, but not the general term for all physical components." }
+                ]
+            },
+            {
+                question: "Which of the following is an example of an internal hardware device?",
+                options: [
+                    { text: "Mouse", isCorrect: false, rationale: "A mouse is an external input device." },
+                    { text: "Plotter", isCorrect: false, rationale: "A plotter is an external output device." },
+                    { text: "Motherboard", isCorrect: true, rationale: "The motherboard is a printed circuit board found inside computers connecting all components." },
+                    { text: "Camera", isCorrect: false, rationale: "A camera is typically an external input device." }
+                ]
+            },
+            {
+                question: "What is the primary function of the motherboard?",
+                options: [
+                    { text: "To act as a hub that allows other hardware devices to connect and communicate", isCorrect: true, rationale: "The motherboard links the processor, memory, and expansion cards together through printed copper circuits and slots." },
+                    { text: "To store permanent startup files and BIOS configuration", isCorrect: false, rationale: "Permanent startup configuration is stored on ROM or CMOS chips, not the motherboard itself." },
+                    { text: "To translate high-level programming language into machine code", isCorrect: false, rationale: "Translation into machine code is performed by a compiler." },
+                    { text: "To convert analogue signals from sensors into digital data", isCorrect: false, rationale: "Analogue to digital conversion is handled by an ADC." }
+                ]
+            },
+            {
+                question: "Which component of the Central Processing Unit (CPU) carries out arithmetic operations and logical decisions?",
+                options: [
+                    { text: "Control Unit (CU)", isCorrect: false, rationale: "The CU takes, decodes, and executes instructions while controlling input/output." },
+                    { text: "Arithmetic and Logic Unit (ALU)", isCorrect: true, rationale: "The ALU performs mathematical calculations and logical comparisons." },
+                    { text: "Read-Only Memory (ROM)", isCorrect: false, rationale: "ROM is internal memory, not a component of the CPU." },
+                    { text: "Network Interface Card (NIC)", isCorrect: false, rationale: "The NIC connects the computer to a network." }
+                ]
+            },
+            {
+                question: "What is the role of the Control Unit (CU) inside the CPU?",
+                options: [
+                    { text: "To store temporary applications currently running", isCorrect: false, rationale: "Temporary application storage is handled by RAM." },
+                    { text: "To take instructions, decode them, and execute them", isCorrect: true, rationale: "The CU directs operations and decodes/executes instructions." },
+                    { text: "To generate graphical output for the monitor", isCorrect: false, rationale: "Graphical output is managed by the graphics card." },
+                    { text: "To convert electrical currents into sound waves", isCorrect: false, rationale: "Sound generation is handled by sound cards, DACs, and speakers." }
+                ]
+            },
+            {
+                question: "Which of the following describes Random Access Memory (RAM)?",
+                options: [
+                    { text: "Permanent, non-volatile memory used to boot the computer", isCorrect: false, rationale: "Permanent memory used for booting is ROM." },
+                    { text: "Volatile memory where data currently in use is temporarily stored", isCorrect: true, rationale: "RAM is volatile and loses its contents when power is turned off." },
+                    { text: "Magnetic storage used to permanently save user files", isCorrect: false, rationale: "Permanent user files are stored on HDDs or SSDs." },
+                    { text: "An integrated circuit used exclusively for audio processing", isCorrect: false, rationale: "Audio processing is done by a sound card." }
+                ]
+            },
+            {
+                question: "What is a key characteristic of Read-Only Memory (ROM)?",
+                options: [
+                    { text: "Its contents are lost when power is turned off", isCorrect: false, rationale: "Loss of data upon power loss describes volatile memory like RAM." },
+                    { text: "It can be written to and read from freely by the user", isCorrect: false, rationale: "RAM can be written to and read from; ROM cannot be altered by normal user operations." },
+                    { text: "It stores permanent data such as configuration data and the BIOS", isCorrect: true, rationale: "ROM holds essential startup and configuration instructions permanently." },
+                    { text: "It provides network connectivity via a unique MAC address", isCorrect: false, rationale: "MAC addresses are hard-coded onto a Network Interface Card (NIC)." }
+                ]
+            },
+            {
+                question: "What is the function of a graphics card?",
+                options: [
+                    { text: "To allow a computer to send graphical information to a display device", isCorrect: true, rationale: "Graphics cards render and transmit visual data to monitors, televisions, or projectors." },
+                    { text: "To connect computers to a local area network or the internet", isCorrect: false, rationale: "Network connection is handled by an NIC." },
+                    { text: "To amplify electrical currents before sending them to speakers", isCorrect: false, rationale: "Audio amplification is done by amplifiers and sound cards." },
+                    { text: "To convert analogue audio signals into digital recordings", isCorrect: false, rationale: "Audio recording conversion is managed by sound cards." }
+                ]
+            },
+            {
+                question: "Which component allows a computer to connect to a wired or wireless network and contains a unique hard-coded MAC address?",
+                options: [
+                    { text: "Sound card", isCorrect: false, rationale: "A sound card handles audio production and recording." },
+                    { text: "Graphics card", isCorrect: false, rationale: "A graphics card handles video and visual output." },
+                    { text: "Network Interface Card (NIC)", isCorrect: true, rationale: "An NIC connects devices to networks and holds a unique MAC address." },
+                    { text: "Arithmetic and Logic Unit", isCorrect: false, rationale: "The ALU is an internal CPU component." }
+                ]
+            },
+            {
+                question: "Which storage device relies on magnetic surfaces and rotating platters to store data?",
+                options: [
+                    { text: "Solid-State Drive (SSD)", isCorrect: false, rationale: "SSDs use flash memory chips with no moving parts." },
+                    { text: "Hard Disk Drive (HDD)", isCorrect: true, rationale: "HDDs use magnetic platters and read/write heads." },
+                    { text: "Read-Only Memory (ROM)", isCorrect: false, rationale: "ROM is semiconductor memory." },
+                    { text: "Random Access Memory (RAM)", isCorrect: false, rationale: "RAM is volatile electronic semiconductor memory." }
+                ]
+            },
+            {
+                question: "What is the general term for the programs that control the computer system and process data?",
+                options: [
+                    { text: "Hardware", isCorrect: false, rationale: "Hardware refers to physical components." },
+                    { text: "Software", isCorrect: true, rationale: "Software refers to the programs and instructions running on a computer." },
+                    { text: "Peripherals", isCorrect: false, rationale: "Peripherals are auxiliary hardware devices." },
+                    { text: "Circuits", isCorrect: false, rationale: "Circuits are physical electronic pathways." }
+                ]
+            },
+            {
+                question: "Which of the following is classified as applications software?",
+                options: [
+                    { text: "Operating system", isCorrect: false, rationale: "An operating system is system software." },
+                    { text: "Spreadsheet software", isCorrect: true, rationale: "Spreadsheets are applications designed to solve user tasks involving numerical data." },
+                    { text: "Device driver", isCorrect: false, rationale: "A device driver is system software enabling hardware communication." },
+                    { text: "Compiler", isCorrect: false, rationale: "A compiler translates high-level code into machine code as system software." }
+                ]
+            },
+            {
+                question: "What is the primary purpose of system software?",
+                options: [
+                    { text: "To solve specific user tasks such as word processing or video editing", isCorrect: false, rationale: "Solving specific user tasks describes applications software." },
+                    { text: "To provide a platform on which all other software can run and manage computer resources", isCorrect: true, rationale: "System software manages hardware and provides an operational platform." },
+                    { text: "To input analogue physical measurements into a computer", isCorrect: false, rationale: "Analogue input is handled by sensors and ADCs." },
+                    { text: "To convert digital audio signals into sound waves", isCorrect: false, rationale: "Sound conversion is handled by DACs and speakers." }
+                ]
+            },
+            {
+                question: "Which utility program is designed to rearrange fragmented data on a disk to improve access speed?",
+                options: [
+                    { text: "Antivirus", isCorrect: false, rationale: "Antivirus protects against malware." },
+                    { text: "Disk defragmenter", isCorrect: true, rationale: "A disk defragmenter consolidates split files on magnetic drives to optimize read times." },
+                    { text: "Device driver", isCorrect: false, rationale: "A driver interfaces hardware with the OS." },
+                    { text: "Linker", isCorrect: false, rationale: "A linker combines compiled object files." }
+                ]
+            },
+            {
+                question: "What does a compiler do?",
+                options: [
+                    { text: "Translates a high-level language program into machine code all at once", isCorrect: true, rationale: "A compiler converts source code into executable object code." },
+                    { text: "Combines multiple object files into a single executable program", isCorrect: false, rationale: "Combining object files is the job of a linker." },
+                    { text: "Enables hardware devices to communicate with the operating system", isCorrect: false, rationale: "Hardware communication is managed by device drivers." },
+                    { text: "Backs up critical files to external removable storage", isCorrect: false, rationale: "File backup is performed by utility software." }
+                ]
+            },
+            {
+                question: "What is the function of a linker?",
+                options: [
+                    { text: "To translate source code into object code", isCorrect: false, rationale: "Source code translation is performed by a compiler." },
+                    { text: "To combine one or more object files produced by a compiler into a single executable program", isCorrect: true, rationale: "Linkers merge code modules together into a final runnable program." },
+                    { text: "To link the operating system directly to physical input sensors", isCorrect: false, rationale: "Sensors interface through device drivers and ADCs." },
+                    { text: "To provide web links within HTML pages", isCorrect: false, rationale: "HTML hyperlinks connect web pages and resources." }
+                ]
+            },
+            {
+                question: "What is the role of a device driver?",
+                options: [
+                    { text: "To enable hardware devices to communicate with the operating system", isCorrect: true, rationale: "Drivers act as translators between hardware peripherals and the OS." },
+                    { text: "To drive the read/write heads across magnetic hard disk platters", isCorrect: false, rationale: "Read/write head movement is controlled by internal drive mechanisms." },
+                    { text: "To convert digital data into analogue electrical signals for speakers", isCorrect: false, rationale: "Digital to analogue conversion is done by DACs." },
+                    { text: "To optimize free space on storage drives", isCorrect: false, rationale: "Drive optimization is done by disk utilities." }
+                ]
+            },
+            {
+                question: "What type of data can a computer understand directly?",
+                options: [
+                    { text: "Analogue data", isCorrect: false, rationale: "Analogue data is continuous physical data requiring conversion." },
+                    { text: "Digital data (binary format of 0s and 1s)", isCorrect: true, rationale: "Computers process discrete digital binary signals." },
+                    { text: "Audio wave frequencies", isCorrect: false, rationale: "Audio waves are continuous physical phenomena." },
+                    { text: "High-level programming syntax", isCorrect: false, rationale: "High-level code must be compiled into machine code first." }
+                ]
+            },
+            {
+                question: "How is analogue data characterized?",
+                options: [
+                    { text: "It consists of discrete, discontinuous values like 0 and 1", isCorrect: false, rationale: "Discrete discontinuous values describe digital data." },
+                    { text: "It changes smoothly and continuously with an infinite number of possible values", isCorrect: true, rationale: "Analogue data varies continuously without discrete steps." },
+                    { text: "It is stored exclusively in solid-state flash memory chips", isCorrect: false, rationale: "Storage chips hold digital binary data." },
+                    { text: "It can only be processed by the arithmetic and logic unit", isCorrect: false, rationale: "CPUs process digital binary data." }
+                ]
+            },
+            {
+                question: "What hardware component is required to convert physical analogue signals into digital data for a computer?",
+                options: [
+                    { text: "Digital to Analogue Converter (DAC)", isCorrect: false, rationale: "A DAC converts digital signals into analogue output." },
+                    { text: "Analogue to Digital Converter (ADC)", isCorrect: true, rationale: "An ADC samples physical analogue inputs and converts them to binary digital values." },
+                    { text: "Central Processing Unit (CPU)", isCorrect: false, rationale: "The CPU executes instructions rather than converting signal types." },
+                    { text: "Network Interface Card (NIC)", isCorrect: false, rationale: "An NIC handles network data packets." }
+                ]
+            },
+            {
+                question: "When a computer needs to control a physical device using digital output signals, what converter is required?",
+                options: [
+                    { text: "Analogue to Digital Converter (ADC)", isCorrect: false, rationale: "An ADC converts inputs into digital format." },
+                    { text: "Digital to Analogue Converter (DAC)", isCorrect: true, rationale: "A DAC converts digital computer output into analogue electrical control signals." },
+                    { text: "Graphics card", isCorrect: false, rationale: "A graphics card sends graphical info to display monitors." },
+                    { text: "Sound card", isCorrect: false, rationale: "A sound card handles audio inputs and outputs." }
+                ]
+            },
+            {
+                question: "What is a microprocessor?",
+                options: [
+                    { text: "A temporary storage chip that holds running applications", isCorrect: false, rationale: "Temporary storage is RAM." },
+                    { text: "A single integrated circuit that acts as the CPU at the heart of computer systems", isCorrect: true, rationale: "A microprocessor is a complete CPU on a single integrated circuit chip." },
+                    { text: "A specialized circuit board used exclusively for network cabling", isCorrect: false, rationale: "Network connection is handled by an NIC." },
+                    { text: "A battery-powered chip storing system date and time", isCorrect: false, rationale: "Date and time are maintained by a CMOS chip." }
+                ]
+            },
+            {
+                question: "What does CMOS stand for in computer systems?",
+                options: [
+                    { text: "Central Memory Operating System", isCorrect: false, rationale: "This is incorrect terminology." },
+                    { text: "Complementary Metal Oxide Semiconductor", isCorrect: true, rationale: "CMOS is a battery-powered non-volatile chip storing BIOS settings, date, and time." },
+                    { text: "Computer Managed Output Software", isCorrect: false, rationale: "This is not a standard computer term." },
+                    { text: "Compiled Machine Operating Structure", isCorrect: false, rationale: "This is incorrect." }
+                ]
+            },
+            {
+                question: "Which of the following is an example of an input device?",
+                options: [
+                    { text: "Monitor", isCorrect: false, rationale: "A monitor is an output device." },
+                    { text: "Plotter", isCorrect: false, rationale: "A plotter is an output device." },
+                    { text: "Keyboard", isCorrect: true, rationale: "A keyboard is a manual input device used to enter data." },
+                    { text: "Loudspeaker", isCorrect: false, rationale: "A loudspeaker is an output device producing sound." }
+                ]
+            },
+            {
+                question: "What is backing storage primarily used for?",
+                options: [
+                    { text: "Temporarily holding instructions currently executed by the CPU", isCorrect: false, rationale: "Temporary execution holding is RAM." },
+                    { text: "Permanently storing large amounts of data, applications, and operating systems", isCorrect: true, rationale: "Backing storage provides non-volatile permanent file retention." },
+                    { text: "Booting up the computer during initial startup checks", isCorrect: false, rationale: "Boot startup instructions are stored in ROM." },
+                    { text: "Converting physical sensor readings into binary numbers", isCorrect: false, rationale: "Sensor conversion is done by ADCs." }
+                ]
+            },
+            {
+                question: "Which statement correctly compares RAM and Backing Storage?",
+                options: [
+                    { text: "RAM is non-volatile while backing storage is volatile", isCorrect: false, rationale: "RAM is volatile; backing storage is non-volatile." },
+                    { text: "RAM can be accessed directly by the CPU, whereas data on backing storage must first be moved into RAM", isCorrect: true, rationale: "Backing storage is not directly addressable by the CPU." },
+                    { text: "Backing storage has a much smaller capacity than RAM", isCorrect: false, rationale: "Backing storage has a much larger capacity than RAM." },
+                    { text: "Data access time on backing storage is extremely fast compared to RAM", isCorrect: false, rationale: "RAM access time is significantly faster than backing storage." }
+                ]
+            },
+            {
+                question: "What is an embedded system?",
+                options: [
+                    { text: "A computer system built into a larger device to perform specific dedicated control tasks", isCorrect: true, rationale: "Embedded systems control specific devices like washing machines or car engines." },
+                    { text: "An operating system installed on a desktop computer", isCorrect: false, rationale: "Desktop operating systems are general-purpose platforms." },
+                    { text: "A removable solid-state USB flash drive", isCorrect: false, rationale: "USB drives are portable backing storage media." },
+                    { text: "A software compiler used for high-level programming languages", isCorrect: false, rationale: "A compiler is system software." }
+                ]
+            },
+            {
+                question: "Which of the following application software types is best suited for organizing and manipulating numerical data on a grid of rows and columns?",
+                options: [
+                    { text: "Word processing", isCorrect: false, rationale: "Word processing handles text documents." },
+                    { text: "Database management system", isCorrect: false, rationale: "Databases organize records and fields across tables." },
+                    { text: "Spreadsheet", isCorrect: true, rationale: "Spreadsheets use grids of cells identified by columns and rows to calculate and model numerical data." },
+                    { text: "Computer-aided design (CAD)", isCorrect: false, rationale: "CAD is used for creating engineering and architectural 2D/3D drawings." }
+                ]
+            },
+            {
+                question: "What type of software allows a user to create 2D or 3D technical drawings, rotate views, and estimate manufacturing costs?",
+                options: [
+                    { text: "Video editing software", isCorrect: false, rationale: "Video editors manipulate video clips and transitions." },
+                    { text: "Control and measurement software", isCorrect: false, rationale: "Control software interfaces with physical sensors." },
+                    { text: "Computer-aided design (CAD) software", isCorrect: true, rationale: "CAD is specialized software for engineering and architectural design." },
+                    { text: "Audio editing software", isCorrect: false, rationale: "Audio software edits sound tracks and frequencies." }
+                ]
+            },
+            {
+                question: "Which software tool allows a computer or microprocessor to interface with sensors to measure physical quantities like temperature in the real world?",
+                options: [
+                    { text: "Control and measurement software", isCorrect: true, rationale: "This software compares sensor readings with stored data to monitor and control processes." },
+                    { text: "Utility antivirus software", isCorrect: false, rationale: "Antivirus protects against malware." },
+                    { text: "Disk defragmenter", isCorrect: false, rationale: "Defragmenters organize magnetic storage blocks." },
+                    { text: "Word processor", isCorrect: false, rationale: "Word processors edit text documents." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionCounter = document.getElementById("question-counter");
+        const scoreDisplay = document.getElementById("score-display");
+        const questionBox = document.getElementById("question-box");
+        const optionsContainer = document.getElementById("options-container");
+        const feedbackBox = document.getElementById("feedback-box");
+        const nextBtn = document.getElementById("next-btn");
+        const quizContainer = document.getElementById("quiz-container");
+        const resultsContainer = document.getElementById("results-container");
+        const finalScore = document.getElementById("final-score");
+
+        function loadQuestion() {
+            answered = false;
+            feedbackBox.classList.add("hidden");
+            nextBtn.classList.add("hidden");
+
+            const q = questions[currentQuestionIndex];
+            questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+            scoreDisplay.textContent = `Score: ${score}`;
+            questionBox.textContent = q.question;
+
+            optionsContainer.innerHTML = "";
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "w-full text-left bg-slate-700 hover:bg-slate-600 text-slate-100 p-4 rounded-xl border border-slate-600 transition font-medium";
+                btn.textContent = opt.text;
+                btn.onclick = () => selectOption(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, btnElement) {
+            if (answered) return;
+            answered = true;
+
+            const q = questions[currentQuestionIndex];
+            const allOptionButtons = optionsContainer.children;
+
+            q.options.forEach((opt, idx) => {
+                allOptionButtons[idx].disabled = true;
+                if (opt.isCorrect) {
+                    allOptionButtons[idx].classList.remove("bg-slate-700", "hover:bg-slate-600", "border-slate-600");
+                    allOptionButtons[idx].classList.add("bg-emerald-800", "border-emerald-600", "text-emerald-100");
+                } else if (idx === selectedIndex) {
+                    allOptionButtons[idx].classList.remove("bg-slate-700", "hover:bg-slate-600", "border-slate-600");
+                    allOptionButtons[idx].classList.add("bg-rose-900", "border-rose-700", "text-rose-100");
+                }
+            });
+
+            const selectedOpt = q.options[selectedIndex];
+            feedbackBox.classList.remove("hidden");
+            if (selectedOpt.isCorrect) {
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+                feedbackBox.className = "p-4 rounded-xl mb-4 text-sm font-medium bg-emerald-950 border border-emerald-700 text-emerald-200";
+                feedbackBox.innerHTML = `<strong>Correct!</strong> ${selectedOpt.rationale}`;
+            } else {
+                feedbackBox.className = "p-4 rounded-xl mb-4 text-sm font-medium bg-rose-950 border border-rose-700 text-rose-200";
+                feedbackBox.innerHTML = `<strong>Incorrect.</strong> ${selectedOpt.rationale}`;
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = "Next Question";
+            } else {
+                nextBtn.textContent = "View Results";
+            }
+            nextBtn.classList.remove("hidden");
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                quizContainer.classList.add("hidden");
+                resultsContainer.classList.remove("hidden");
+                finalScore.textContent = `You scored ${score} out of ${questions.length}`;
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultsContainer.classList.add("hidden");
+            quizContainer.classList.remove("hidden");
+            loadQuestion();
+        }
+
+        // Initialize quiz on load
+        loadQuestion();
+    </script>
+</body>
+</html>
